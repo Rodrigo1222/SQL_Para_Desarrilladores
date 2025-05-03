@@ -1,0 +1,131 @@
+1. ¿Qué es una base de datos?
+Una base de datos es una herramienta que me permite guardar, organizar y acceder a información de manera estructurada.
+
+2. Menciona dos diferencias entre bases de datos relacionales y NoSQL.
+- las relacionales usan tablas con esquemas fijos, las NoSQL permiten estructuras flexibles.
+- Las relacionales usan SQL, las NoSQL tienen su propio lenguaje según el tipo de base de datos.
+
+3. Dos gestores de bases de datos y un caso de uso:
+- MySQL: lo usé para una tienda en línea, guardando usuarios y productos.
+- BigQuery: lo usé para analizar millones de registros de ventas y obtener promedios y tendencias.
+
+4. ¿Qué representa un modelo entidad-relación?
+Representa de forma visual cómo se relacionan los datos en una base. 
+
+5. ¿Qué es la cardinalidad en un diagrama ER? Da un ejemplo.
+Indica cuántas veces una entidad se relaciona con otra. 
+Ejemplo: un cliente realiza muchos pedidos, es una relación 1:N pero un pedido solo teien un cliente
+
+6. ¿Qué es la normalización y su objetivo?
+Es un proceso para organizar los datos y evitar duplicaciones. Por lo que entiendo es evitar big tables, y dejar todo en una estructura más manejable y estandar.
+
+7. Dos funciones de texto en SQL (BigQuery):
+
+- UPPER que pone el texto de uina columna en mayusculas.
+
+- EXTRACT extrae una parte previamente establecida de un texto para una nueva columna.
+
+8. ¿Qué hace la función AVG()?
+Calcula el promedio de una columna.
+
+9. ¿Para qué sirve IS NULL?
+
+Sirve para encontrar registros donde un campo no tiene valor asignado.
+
+Sección 2: Ejercicio práctico (80 puntos - 40 minutos)
+Usa esta estructura de tabla:
+
+CREATE TABLE alumnos (
+  id INT AUTO_INCREMENT PRIMARY KEY,
+  nombre VARCHAR(100) NOT NULL,
+  edad INT,
+  promedio DECIMAL(4,2),
+  genero CHAR(1),
+  fecha_ingreso DATE
+);
+
+Parte A: Lenguaje DDL (10 puntos)
+Escribe el comando SQL para crear la tabla anterior. (5 pts)
+CREATE TABLE alumnos (
+  id INT AUTO_INCREMENT PRIMARY KEY,
+  nombre VARCHAR(100) NOT NULL,
+  edad INT,
+  promedio DECIMAL(4,2),
+  genero CHAR(1),
+  fecha_ingreso DATE
+);
+
+2. Agrega una restricción para que el promedio no pueda ser menor a 6. 
+
+CREATE OR REPLACE TABLE alumnos_que_aprobaron AS
+SELECT *
+FROM alumnos
+WHERE promedio > 6;
+
+Parte B: Inserción y actualización (20 puntos)
+
+3. Inserta tres alumnos con datos reales. (10 pts)
+INSERT INTO alumnos (nombre, edad, promedio, genero, fecha_ingreso)
+VALUES
+('Aldo Mondragón', 22, 8.5, 'M', '2024-08-20'),
+('Josué Ramírez', 23, 7.2, 'M', '2024-08-21'),
+('Diana López', 21, 9.0, 'F', '2024-08-22');
+
+4. Actualiza el promedio de un alumno a 9.5. 
+
+UPDATE alumnos
+SET promedio = 9.5
+WHERE nombre = 'Aldo Mondragón';
+
+5. Mostrar todos los alumnos:
+SELECT * 
+FROM alumnos;
+
+6 Mostrar solo alumnas:
+
+SELECT 
+nombre 
+FROM alumnos 
+WHERE genero = 'F';
+
+7. Alumnos con promedio mayor a 8:
+
+SELECT * 
+FROM alumnos 
+WHERE promedio > 8;
+
+8. Muestra los alumnos ordenados por fecha de ingreso.
+
+SELECT * 
+FROM alumnos 
+ORDER BY fecha_ingreso;
+
+9. Nombre y promedio con alias:
+SELECT 
+nombre AS Nombre_Alumno, 
+promedio AS Promedio_Final 
+FROM alumnos;
+
+10. Alumnos cuyo nombre comienza con "A":
+SELECT * 
+FROM alumnos 
+WHERE nombre 
+LIKE 'A%';
+
+11. Cantidad total de alumnos:
+SELECT COUNT(*) AS total_alumnos 
+FROM alumnos;
+
+12. Promedio general:
+SELECT AVG(promedio) AS promedio_general 
+FROM alumnos;
+
+13. Alumno con menor promedio:
+SELECT * 
+FROM alumnos 
+ORDER BY promedio ASC LIMIT 1;
+
+14. Alumnos que ingresaron este año:
+SELECT * 
+FROM alumnos
+WHERE EXTRACT(YEAR FROM fecha_ingreso) = EXTRACT(YEAR FROM CURRENT_DATE());
